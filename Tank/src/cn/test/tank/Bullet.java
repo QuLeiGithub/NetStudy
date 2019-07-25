@@ -17,6 +17,14 @@ public class Bullet {
         return live;
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     public void setLive(boolean live) {
         this.live = live;
     }
@@ -29,7 +37,6 @@ public class Bullet {
     }
 
     public void paint(Graphics g) {
-
         switch(dir) {
             case LEFT:
                 g.drawImage(ResourceMgr.bulletL , x, y, null);
@@ -77,14 +84,14 @@ public class Bullet {
     }
 
     public void collidesWithTank(Tank tank){
-        if(!tank.isLiving()) return;
+        if(!isLive() || !tank.isLiving()) return;
+        if(getGroup() == tank.getGroup())return;
         Rectangle rect = new Rectangle(x,y,Bullet.WIDTH,Bullet.HEIGHT);
         Rectangle rectTank = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
         if(rect.intersects(rectTank)){
             die();
             tank.die();
         }
-
     }
 
     public void die(){
