@@ -26,6 +26,7 @@ public class Explode {
         this.y = y;
         this.width = ResourceMgr.explodes[0].getWidth();
         this.height =ResourceMgr.explodes[0].getHeight() ;
+        new Thread(()->new Audio("audio/explode.wav").play()).start();
     }
 
     public void paint(Graphics g) {

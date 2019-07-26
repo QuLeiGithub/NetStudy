@@ -59,6 +59,7 @@ public class Player {
 	private void move() {
 		
 		if(!moving) return ;
+		new Thread(()->new Audio("audio/tank_move.wav")).start();
 		
 		switch (dir) {
 		case LEFT:
@@ -123,6 +124,7 @@ public class Player {
 
 
 	public void fire() {
+
 		int bX = this.x + Player.WIDTH/2 - Bullet.WIDTH/2 ;
 		int bY = this.y + Player.HEIGHT/2 - Bullet.HEIGHT/2;
 		TankFrame.INSTANCE.add(new Bullet(bX, bY, this.dir, this.group));

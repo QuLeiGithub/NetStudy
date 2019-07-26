@@ -13,6 +13,8 @@ import java.util.List;
 
 public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
+    public static final int GAME_WIDTH = 1080;
+    public static final int GAME_HEIGHT = 960;
     private Player myTank;
     private List<Tank> tanks;
     private List<Bullet> bullets;
@@ -22,19 +24,18 @@ public class TankFrame extends Frame {
      * 初始化遊戲對象
      */
     private void initGameObjects() {
+        int tankCount =Integer.parseInt(PropertyMgr.get("initTankCount"));
         myTank = new Player(200, 400, Dir.DOWN, Group.GOOD);
         tanks = new ArrayList<>();
         bullets = new ArrayList<>();
         explodes = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < tankCount; i++) {
             tanks.add(new Tank(100 + 50 * i, 200, Dir.DOWN, Group.BAD));
         }
 
 
     }
 
-
-    static final int GAME_WIDTH = 1080, GAME_HEIGHT = 960;
 
     //将窗口类设置成为单例的
     private TankFrame() {
