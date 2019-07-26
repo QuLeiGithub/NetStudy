@@ -145,6 +145,7 @@ public class Tank {
 
 	public void die() {
 		this.living = false;
+		TankFrame.INSTANCE.add(new Explode(x, y));
 	}
 
 
