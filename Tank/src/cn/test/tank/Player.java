@@ -1,5 +1,9 @@
 package cn.test.tank;
 
+import cn.test.tank.strategy.DefaultFireStrategy;
+import cn.test.tank.strategy.FireStrategy;
+import cn.test.tank.strategy.FourDirFireStrategy;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -31,7 +35,14 @@ public class Player {
 
 	}
 
-	
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
 	public Dir getDir() {
 		return dir;
 	}
@@ -124,11 +135,14 @@ public class Player {
 
 
 	public void fire() {
-
-		int bX = this.x + Player.WIDTH/2 - Bullet.WIDTH/2 ;
-		int bY = this.y + Player.HEIGHT/2 - Bullet.HEIGHT/2;
-		TankFrame.INSTANCE.add(new Bullet(bX, bY, this.dir, this.group));
-
+		Class<FireStrategy> clazz = null;
+		try {
+			clazz = (Class<FireStrategy>) Class.forName("cn.test.tank.strategy."+ PropertyMgr.get("tankFireStrategy"));
+			FireStrategy fireStrategy = clazz.newInstance();
+			fireStrategy.fire(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 		public void keyPressed(KeyEvent e) {
