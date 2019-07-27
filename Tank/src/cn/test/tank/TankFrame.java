@@ -1,5 +1,10 @@
 package cn.test.tank;
 
+import cn.test.tank.chainofresponsibility.BulletTankCollider;
+import cn.test.tank.chainofresponsibility.BulletWallCollider;
+import cn.test.tank.chainofresponsibility.Collider;
+import cn.test.tank.chainofresponsibility.ColliderChain;
+
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -16,9 +21,10 @@ public class TankFrame extends Frame {
     public static final int GAME_WIDTH = 1080;
     public static final int GAME_HEIGHT = 960;
     private Player myTank;
-    private List<Tank> tanks;
-    private List<Bullet> bullets;
-    private List<Explode> explodes;
+    private Wall wall;
+    private List<AbstractGameObject> objects;
+    private ColliderChain chain = new ColliderChain();
+
 
     /**
      * 初始化遊戲對象
@@ -26,13 +32,13 @@ public class TankFrame extends Frame {
     private void initGameObjects() {
         int tankCount =Integer.parseInt(PropertyMgr.get("initTankCount"));
         myTank = new Player(200, 400, Dir.DOWN, Group.GOOD);
-        tanks = new ArrayList<>();
-        bullets = new ArrayList<>();
-        explodes = new ArrayList<>();
+        wall = new Wall(250,250,300,150);
+        objects = new ArrayList<>();
         for (int i = 0; i < tankCount; i++) {
-            tanks.add(new Tank(100 + 50 * i, 200, Dir.DOWN, Group.BAD));
+            objects.add(new Tank(100 + 50 * i, 200, Dir.DOWN, Group.BAD));
         }
-
+        objects.add(wall);
+        objects.add(myTank);
 
     }
 
@@ -45,9 +51,7 @@ public class TankFrame extends Frame {
         setTitle("tank war");
         setVisible(true);
 
-
         this.addKeyListener(new TankKeyListener());
-
         addWindowListener(new WindowAdapter() {
 
             @Override
@@ -58,55 +62,34 @@ public class TankFrame extends Frame {
         });
     }
 
-    public void add(Bullet bullet) {
-        bullets.add(bullet);
-    }
-    public void add(Explode explode){
-        explodes.add(explode);
 
+    /**
+     * 添加游戏对象
+     * @param gameObject
+     */
+    public void add(AbstractGameObject gameObject){
+        objects.add(gameObject);
     }
-
 
     @Override
     public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("bullets:" + bullets.size(), 10, 50);
-        g.drawString("tanks:" + tanks.size(), 10, 70);
-        g.drawString("explodes:" + explodes.size(), 10, 90);
+        g.drawString("objects:" + objects.size(), 10, 50);
         g.setColor(c);
-
-
-        myTank.paint(g);
-        for (int i = 0; i < tanks.size(); i++) {
-            if (!tanks.get(i).isLiving()) {
-                tanks.remove(i);
-            } else {
-                tanks.get(i).paint(g);
+        for (int i = 0; i < objects.size();i++){
+            AbstractGameObject go1 = objects.get(i);
+            if(go1.isLiving()){
+                for(int j = 0 ; j < objects.size();j++){
+                    AbstractGameObject go2 = objects.get(j);
+                    chain.collide(go1,go2);
+                }
+                go1.paint(g);
+            }else {
+                objects.remove(go1);
             }
+
         }
-        //画子弹
-        for (int i = 0; i < bullets.size(); i++) {
-            for (int j = 0; j < tanks.size(); j++) {
-                bullets.get(i).collidesWithTank(tanks.get(j));
-            }
-
-            //判断当子弹越界时删除
-            if (!bullets.get(i).isLive()) {
-                bullets.remove(i);
-            } else {
-                //不越界时画
-                bullets.get(i).paint(g);
-            }
-        }
-        for (int i = 0; i < explodes.size(); i++) {
-            if (!explodes.get(i).isLive()) {
-                explodes.remove(i);
-            } else {
-                explodes.get(i).paint(g);
-            }
-        }
-
 
     }
 

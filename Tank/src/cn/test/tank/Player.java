@@ -12,7 +12,7 @@ import java.util.Random;
 /**
  * 玩家坦克
  */
-public class Player {
+public class Player extends AbstractGameObject{
 	private static final int SPEED = 5;
 	public static int WIDTH = ResourceMgr.goodTankU.getWidth();
 	public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
@@ -24,6 +24,7 @@ public class Player {
 
 	private boolean moving = false;
 	private boolean living = true;
+	private FireStrategy fireStrategy ;
 
 
 	public Player(int x, int y, Dir dir, Group group) {
@@ -32,7 +33,8 @@ public class Player {
 		this.y = y;
 		this.dir = dir;
 		this.group = group;
-
+		//init fire strategy by config file
+		initFireStrategy();
 	}
 
 	public Group getGroup() {
@@ -135,11 +137,15 @@ public class Player {
 
 
 	public void fire() {
+		fireStrategy.fire(this);
+	}
+
+	private void initFireStrategy(){
 		Class<FireStrategy> clazz = null;
 		try {
+			//根据不同的策略加载不同的子弹策略
 			clazz = (Class<FireStrategy>) Class.forName("cn.test.tank.strategy."+ PropertyMgr.get("tankFireStrategy"));
-			FireStrategy fireStrategy = clazz.newInstance();
-			fireStrategy.fire(this);
+			fireStrategy = clazz.newInstance();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

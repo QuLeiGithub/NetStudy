@@ -1,14 +1,15 @@
 package cn.test.tank;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.Random;
 
-public class Tank {
+public class Tank extends AbstractGameObject{
 	private static final int SPEED = 1;
 	public static int WIDTH = ResourceMgr.goodTankU.getWidth();
 	public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
 	private Group group;
 	private Dir dir;
+	private Rectangle rect;
 
 	private int x, y;
 	private int oldX,oldY;
@@ -26,6 +27,8 @@ public class Tank {
 		this.dir = dir;
 		oldX = x;
 		oldY = y;
+
+		rect = new Rectangle(x,y,WIDTH,HEIGHT);
 	}
 
 	public Group getGroup() {
@@ -43,6 +46,14 @@ public class Tank {
 	public int getY() {
 		return y;
 	}
+
+    public Rectangle getRect() {
+        return rect;
+    }
+
+    public void setRect(Rectangle rect) {
+        this.rect = rect;
+    }
 
     public boolean isLiving() {
         return living;
@@ -81,6 +92,9 @@ public class Tank {
 			fire();
 		}
 
+		rect.x = x;
+		rect.y = y;
+
 		
 	}
 
@@ -93,7 +107,7 @@ public class Tank {
 	/**
 	 * 出界了回去
 	 */
-	private void back() {
+	public void back() {
 		x= oldX;
 		y = oldY;
 	}

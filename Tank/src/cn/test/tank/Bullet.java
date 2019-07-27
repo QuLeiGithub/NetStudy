@@ -4,7 +4,7 @@ import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.awt.*;
 
-public class Bullet {
+public class Bullet extends AbstractGameObject{
     private int x,y;
     private Dir dir;
     private static final int SPEED = 6;
@@ -12,6 +12,31 @@ public class Bullet {
     private boolean live = true;
     public static int WIDTH = ResourceMgr.bulletU.getWidth();
     public static int HEIGHT = ResourceMgr.bulletU.getHeight();
+    private Rectangle rect ;
+
+    public Rectangle getRect() {
+        return rect;
+    }
+
+    public void setRect(Rectangle rect) {
+        this.rect = rect;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 
     public boolean isLive() {
         return live;
@@ -34,6 +59,7 @@ public class Bullet {
         this.y = y;
         this.dir = dir;
         this.group = group;
+        rect = new Rectangle(x,y,WIDTH,HEIGHT);
     }
 
     public void paint(Graphics g) {
@@ -55,6 +81,11 @@ public class Bullet {
 
     }
 
+    @Override
+    public boolean isLiving() {
+        return live;
+    }
+
     private void move() {
         switch (dir) {
             case LEFT:
@@ -70,7 +101,9 @@ public class Bullet {
                 y += SPEED;
                 break;
         }
-
+        //update the rect
+        rect.x = x;
+        rect.y = y;
         boundsCheck();
     }
 
@@ -84,14 +117,7 @@ public class Bullet {
     }
 
     public void collidesWithTank(Tank tank){
-        if(!isLive() || !tank.isLiving()) return;
-        if(getGroup() == tank.getGroup())return;
-        Rectangle rect = new Rectangle(x,y,Bullet.WIDTH,Bullet.HEIGHT);
-        Rectangle rectTank = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
-        if(rect.intersects(rectTank)){
-            die();
-            tank.die();
-        }
+
     }
 
     public void die(){

@@ -5,7 +5,7 @@ import java.awt.*;
 /**
  * 爆炸类
  */
-public class Explode {
+public class Explode extends AbstractGameObject{
     private int x,y;
     private   int width,height;
     //话第几步
@@ -35,6 +35,11 @@ public class Explode {
         step++;
         if(step >= ResourceMgr.explodes.length)
             die();
+    }
+
+    @Override
+    public boolean isLiving() {
+        return live;
     }
 
     private void die() {
