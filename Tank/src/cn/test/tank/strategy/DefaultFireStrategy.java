@@ -9,6 +9,6 @@ public class DefaultFireStrategy implements FireStrategy{
     public void fire(Player p) {
         int bX = p.getX() + Player.WIDTH/2 - Bullet.WIDTH/2 ;
         int bY = p.getY() + Player.HEIGHT/2 - Bullet.HEIGHT/2;
-        TankFrame.INSTANCE.add(new Bullet(bX, bY, p.getDir(), p.getGroup()));
+        TankFrame.INSTANCE.getGm().add(new Bullet(bX, bY, p.getDir(), p.getGroup()));
     }
 }

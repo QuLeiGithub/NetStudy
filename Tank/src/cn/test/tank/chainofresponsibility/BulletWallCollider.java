@@ -11,7 +11,7 @@ public class BulletWallCollider implements Collider {
             if(b.isLiving()){
                 if(b.getRect().intersects(w.getRect())){
                     b.die();
-                    TankFrame.INSTANCE.add(new Explode(b.getX(), b.getY()));
+                    TankFrame.INSTANCE.getGm().add(new Explode(b.getX(), b.getY()));
                     return false;
                 }
             }

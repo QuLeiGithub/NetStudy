@@ -159,13 +159,13 @@ public class Tank extends AbstractGameObject{
 
 	public void die() {
 		this.living = false;
-		TankFrame.INSTANCE.add(new Explode(x, y));
+		TankFrame.INSTANCE.getGm().add(new Explode(x, y));
 	}
 
 
 	public void fire() {
 		int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2 ;
 		int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-		TankFrame.INSTANCE.add(new Bullet(bX, bY, this.dir, this.group));
+		TankFrame.INSTANCE.getGm().add(new Bullet(bX, bY, this.dir, this.group));
 	}
 }

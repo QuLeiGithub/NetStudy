@@ -5,12 +5,23 @@ import cn.test.tank.PropertyMgr;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @Description:  处理碰撞的责任链
+ ** @Author:      QuLei
+ * @CreateDate:   2019-07-28 01:14
+ * @Version:      1.0
+ */
 public class ColliderChain implements Collider{
     private List<Collider> colliders;
     public ColliderChain(){
         initCollider();
     }
+    /**
+    @Description:  初始化责任链
+    * @author      QuLei
+    * @return
+    * @date        2019-07-28 01:14
+    */
     private void initCollider() {
         colliders = new ArrayList<>();
         String [] stringNames = PropertyMgr.get("collidersName").split(",");

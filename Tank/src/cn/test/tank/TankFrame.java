@@ -15,37 +15,25 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @Description:  游戏窗口类
+ ** @Author:      QuLei
+ * @CreateDate:   2019-07-28 01:15
+ * @Version:      1.0
+ */
 public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
+    private GameModel gm;
     public static final int GAME_WIDTH = 1080;
     public static final int GAME_HEIGHT = 960;
-    private Player myTank;
-    private Wall wall;
-    private List<AbstractGameObject> objects;
-    private ColliderChain chain = new ColliderChain();
 
 
-    /**
-     * 初始化遊戲對象
-     */
-    private void initGameObjects() {
-        int tankCount =Integer.parseInt(PropertyMgr.get("initTankCount"));
-        myTank = new Player(200, 400, Dir.DOWN, Group.GOOD);
-        wall = new Wall(250,250,300,150);
-        objects = new ArrayList<>();
-        for (int i = 0; i < tankCount; i++) {
-            objects.add(new Tank(100 + 50 * i, 200, Dir.DOWN, Group.BAD));
-        }
-        objects.add(wall);
-        objects.add(myTank);
 
-    }
 
 
     //将窗口类设置成为单例的
     private TankFrame() {
-        initGameObjects();
+        gm = new GameModel();
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setTitle("tank war");
@@ -63,34 +51,11 @@ public class TankFrame extends Frame {
     }
 
 
-    /**
-     * 添加游戏对象
-     * @param gameObject
-     */
-    public void add(AbstractGameObject gameObject){
-        objects.add(gameObject);
-    }
+
 
     @Override
     public void paint(Graphics g) {
-        Color c = g.getColor();
-        g.setColor(Color.WHITE);
-        g.drawString("objects:" + objects.size(), 10, 50);
-        g.setColor(c);
-        for (int i = 0; i < objects.size();i++){
-            AbstractGameObject go1 = objects.get(i);
-            if(go1.isLiving()){
-                for(int j = 0 ; j < objects.size();j++){
-                    AbstractGameObject go2 = objects.get(j);
-                    chain.collide(go1,go2);
-                }
-                go1.paint(g);
-            }else {
-                objects.remove(go1);
-            }
-
-        }
-
+        gm.paint(g);
     }
 
     Image offScreenImage = null;
@@ -112,13 +77,16 @@ public class TankFrame extends Frame {
     private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            myTank.keyPressed(e);
+            gm.getMyTank().keyPressed(e);
         }
-
 
         @Override
         public void keyReleased(KeyEvent e) {
-            myTank.keyReleased(e);
+            gm.getMyTank().keyReleased(e);
         }
+    }
+
+    public GameModel getGm(){
+        return gm;
     }
 }
