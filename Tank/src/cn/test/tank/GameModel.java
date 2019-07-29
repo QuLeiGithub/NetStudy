@@ -3,6 +3,7 @@ package cn.test.tank;
 import cn.test.tank.chainofresponsibility.ColliderChain;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,8 @@ import java.util.List;
  * @CreateDate:   2019-07-28 21:30
  * @Version:      1.0
  */
-public class GameModel {
+public class GameModel implements Serializable {
+    private static final long serialVersionUID = 7908205397094452380L;
     private Player myTank;
     private List<AbstractGameObject> objects;
     private ColliderChain chain;
@@ -54,16 +56,22 @@ public class GameModel {
         g.setColor(Color.WHITE);
         g.drawString("objects:" + objects.size(), 10, 50);
         g.setColor(c);
+        for(int i = 0 ; i < objects.size();i++){
+            AbstractGameObject object = objects.get(i);
+            if(!object.isLiving()){
+                objects.remove(object);
+                break;
+            }
+        }
+
         for (int i = 0; i < objects.size();i++){
             AbstractGameObject go1 = objects.get(i);
-            if(go1.isLiving()){
                 for(int j = 0 ; j < objects.size();j++){
                     AbstractGameObject go2 = objects.get(j);
                     chain.collide(go1,go2);
                 }
+            if(go1.isLiving()){
                 go1.paint(g);
-            }else {
-                objects.remove(go1);
             }
 
         }

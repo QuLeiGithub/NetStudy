@@ -1,20 +1,12 @@
 package cn.test.tank;
 
-import cn.test.tank.chainofresponsibility.BulletTankCollider;
-import cn.test.tank.chainofresponsibility.BulletWallCollider;
-import cn.test.tank.chainofresponsibility.Collider;
-import cn.test.tank.chainofresponsibility.ColliderChain;
-
-import java.awt.Color;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+
 /**
  * @Description:  游戏窗口类
  ** @Author:      QuLei
@@ -77,16 +69,62 @@ public class TankFrame extends Frame {
     private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            gm.getMyTank().keyPressed(e);
+            int key = e.getKeyCode();
+            if(key == KeyEvent.VK_S) save();
+            else if (key == KeyEvent.VK_Q) load();
+            else gm.getMyTank().keyPressed(e);
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
             gm.getMyTank().keyReleased(e);
         }
+
+
+        private void save(){
+            ObjectOutputStream outputStream = null;
+            try {
+                File f = new File("F:/test/gf.dat");
+                FileOutputStream fileOutputStream = new FileOutputStream(f);
+                outputStream = new ObjectOutputStream(fileOutputStream);
+                outputStream.writeObject(gm);
+                outputStream.flush();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        private void load(){
+            ObjectInputStream objectInputStream= null;
+            try {
+                File f = new File("F:/test/gf.dat");
+                FileInputStream fileInputStream = new FileInputStream(f);
+                objectInputStream = new ObjectInputStream(fileInputStream);
+                gm = (GameModel) objectInputStream.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally {
+
+                try {
+                    objectInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     public GameModel getGm(){
         return gm;
     }
+
+
 }

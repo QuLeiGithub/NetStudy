@@ -11,7 +11,8 @@ import java.util.List;
  * @CreateDate:   2019-07-28 01:14
  * @Version:      1.0
  */
-public class ColliderChain implements Collider{
+public class ColliderChain implements Collider {
+    private static final long serialVersionUID = -9073837609236975027L;
     private List<Collider> colliders;
     public ColliderChain(){
         initCollider();

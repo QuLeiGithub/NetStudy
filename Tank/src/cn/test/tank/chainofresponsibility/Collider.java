@@ -2,7 +2,9 @@ package cn.test.tank.chainofresponsibility;
 
 import cn.test.tank.AbstractGameObject;
 
-public interface Collider {
+import java.io.Serializable;
+
+public interface Collider extends Serializable {
     /**
      *
      * @param go1
