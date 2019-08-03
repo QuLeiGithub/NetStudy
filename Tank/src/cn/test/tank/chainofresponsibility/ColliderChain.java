@@ -37,7 +37,8 @@ public class ColliderChain implements Collider {
         }
     }
 
-    public boolean collide(AbstractGameObject go1,AbstractGameObject go2){
+    @Override
+    public boolean collide(AbstractGameObject go1, AbstractGameObject go2) {
         for (Collider collider : colliders) {
             if(!collider.collide(go1,go2))
                 return false;

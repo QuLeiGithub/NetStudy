@@ -55,7 +55,8 @@ public class Tank extends AbstractGameObject{
         this.rect = rect;
     }
 
-    public boolean isLiving() {
+	@Override
+	public boolean isLiving() {
         return living;
     }
 
@@ -68,8 +69,10 @@ public class Tank extends AbstractGameObject{
 	}
 
 	private void move() {
-		
-		if(!moving) return ;
+
+		if (!moving) {
+			return;
+		}
 		oldX = x;
 		oldY = y;
 		switch (dir) {
@@ -118,26 +121,29 @@ public class Tank extends AbstractGameObject{
 	    //values返回一个数组
 		this.dir = Dir.randomDir();
 	}
-	
+
+	@Override
 	public void paint(Graphics g) {
-	    if(!isLiving()) return;
-		switch(dir) {
-		case LEFT:
-			g.drawImage(ResourceMgr.badTankL , x, y, null);
-			break;
-		case UP:
-			g.drawImage(ResourceMgr.badTankU, x, y, null);
-			break;
-		case RIGHT:
-			g.drawImage(ResourceMgr.badTankR, x, y, null);
-			break;
-		case DOWN:
-			g.drawImage(ResourceMgr.badTankD, x, y, null);
-			break;
+		if (!isLiving()) {
+			return;
 		}
-	
+		switch(dir) {
+			case LEFT:
+				g.drawImage(ResourceMgr.badTankL , x, y, null);
+				break;
+			case UP:
+				g.drawImage(ResourceMgr.badTankU, x, y, null);
+				break;
+			case RIGHT:
+				g.drawImage(ResourceMgr.badTankR, x, y, null);
+				break;
+			case DOWN:
+				g.drawImage(ResourceMgr.badTankD, x, y, null);
+				break;
+		}
+
 		move();
-	
+
 	}
 
 

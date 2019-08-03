@@ -70,9 +70,13 @@ public class TankFrame extends Frame {
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
-            if(key == KeyEvent.VK_S) save();
-            else if (key == KeyEvent.VK_Q) load();
-            else gm.getMyTank().keyPressed(e);
+            if (key == KeyEvent.VK_S) {
+                save();
+            } else if (key == KeyEvent.VK_Q) {
+                load();
+            } else {
+                gm.getMyTank().keyPressed(e);
+            }
         }
 
         @Override
