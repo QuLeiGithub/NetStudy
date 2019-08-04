@@ -16,8 +16,7 @@ public class ClientFrame extends Frame {
     public static final ClientFrame INSTANCE = new ClientFrame();
     private TextArea textArea = new TextArea();
     private TextField textField = new TextField();
-    private ChatClient client = null;
-
+    private Client client = null;
 
     private ClientFrame() {
         this.setSize(300, 400);
@@ -51,20 +50,20 @@ public class ClientFrame extends Frame {
     }
 
     /**
-     * 连接到服务器
-     */
-    public void connectToServer() {
-        client = new ChatClient();
-        client.connect();
-    }
-
-    /**
      * 设置窗口中的信息
      *
      * @param str
      */
     public void updateText(String str) {
         textArea.setText(textArea.getText() + str + "\r\n");
+    }
+
+    /**
+     * 连接到服务器
+     */
+    public void connectToServer() {
+        client = new Client();
+        client.connect();
     }
 
 }

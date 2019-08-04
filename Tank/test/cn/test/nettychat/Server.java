@@ -16,14 +16,15 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  * @CreateDate: 2019-08-04 12:19
  * @Version: 1.0
  */
-public class ChatServer {
+public class Server {
+    //存储客户端连接
     public static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
-    public static void main(String[] args) {
+    public void serverStart() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(2);
         EventLoopGroup workerGroup = new NioEventLoopGroup(4);
-        ServerBootstrap b = new ServerBootstrap();
         try {
+            ServerBootstrap b = new ServerBootstrap();
             ChannelFuture future = b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -32,15 +33,17 @@ public class ChatServer {
                             socketChannel.pipeline().addLast(new ServerChildHandler());
                         }
                     }).bind(8888).sync();
+            ServerFrame.INSTANCE.updateServerMsg("server started.");
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
         }
     }
 
-    static class ServerChildHandler extends ChannelInboundHandlerAdapter {
+    class ServerChildHandler extends ChannelInboundHandlerAdapter {
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -51,12 +54,12 @@ public class ChatServer {
             String str = new String(bytes);
             if ("__bye__".equals(str)) {
                 System.out.println("client ready to quit.");
-                ChatServer.clients.remove(ctx.channel());
+                Server.clients.remove(ctx.channel());
                 ctx.close();
-                System.out.println(ChatServer.clients.size());
+                System.out.println(Server.clients.size());
             } else {
                 //writeAndFlush会自动释放buf
-                ChatServer.clients.writeAndFlush(buf);
+                Server.clients.writeAndFlush(buf);
             }
 
         }
@@ -64,7 +67,7 @@ public class ChatServer {
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
             cause.printStackTrace();
-            ChatServer.clients.remove(ctx.channel());
+            Server.clients.remove(ctx.channel());
             ctx.close();
         }
 
@@ -74,7 +77,7 @@ public class ChatServer {
          */
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            ChatServer.clients.add(ctx.channel());
+            Server.clients.add(ctx.channel());
         }
 
     }
