@@ -13,6 +13,9 @@ import io.netty.util.ReferenceCountUtil;
 public class ChatClient {
     private Channel channel = null;
 
+    /**
+     * 连接到服务器
+     */
     public void connect() {
         EventLoopGroup worker = new NioEventLoopGroup(1);
         Bootstrap bootstrap = new Bootstrap();
@@ -44,6 +47,11 @@ public class ChatClient {
      */
     public void send(String text) {
         channel.writeAndFlush(Unpooled.copiedBuffer(text.getBytes(CharsetUtil.UTF_8)));
+    }
+
+    public void closeConnection() {
+        send("__bye__");
+        channel.close();
     }
 
     static class MyHandler extends ChannelInboundHandlerAdapter {

@@ -1,6 +1,7 @@
 package cn.test.nettychat;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
@@ -40,9 +41,24 @@ public class ChatServer {
     }
 
     static class ServerChildHandler extends ChannelInboundHandlerAdapter {
+
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-            ChatServer.clients.writeAndFlush(msg);
+
+            ByteBuf buf = (ByteBuf) msg;
+            byte[] bytes = new byte[buf.readableBytes()];
+            buf.getBytes(buf.readerIndex(), bytes);
+            String str = new String(bytes);
+            if ("__bye__".equals(str)) {
+                System.out.println("client ready to quit.");
+                ChatServer.clients.remove(ctx.channel());
+                ctx.close();
+                System.out.println(ChatServer.clients.size());
+            } else {
+                //writeAndFlush会自动释放buf
+                ChatServer.clients.writeAndFlush(buf);
+            }
+
         }
 
         @Override
@@ -60,7 +76,6 @@ public class ChatServer {
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
             ChatServer.clients.add(ctx.channel());
         }
-
 
     }
 }

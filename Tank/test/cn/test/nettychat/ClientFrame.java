@@ -3,6 +3,8 @@ package cn.test.nettychat;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * @Description: 实现简单的聊天页面
@@ -30,6 +32,14 @@ public class ClientFrame extends Frame {
                 //send to server
                 client.send(textField.getText());
                 textField.setText("");
+            }
+        });
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                client.closeConnection();
+                System.exit(0);
             }
         });
     }
