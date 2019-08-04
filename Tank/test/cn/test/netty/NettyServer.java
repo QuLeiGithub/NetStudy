@@ -7,10 +7,16 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+/**
+ * @Description: netty是基于纯事件的异步处理
+ * * @Author:      QuLei
+ * @CreateDate: 2019-08-04 11:42
+ * @Version: 1.0
+ */
 public class NettyServer {
 
     public static void main(String[] args) throws InterruptedException {
-        //负责监听事件的线程组
+        //负责监听事件的线程组创建2个线程
         EventLoopGroup boosGroup = new NioEventLoopGroup(2);
         //负责处理事件的线程组
         EventLoopGroup workGroup = new NioEventLoopGroup(4);
@@ -46,6 +52,8 @@ class MyChildHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
+        //super.exceptionCaught(ctx, cause);
+        cause.printStackTrace();
+        ctx.close();
     }
 }
