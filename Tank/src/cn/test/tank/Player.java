@@ -1,13 +1,18 @@
 package cn.test.tank;
 
 import cn.test.tank.strategy.FireStrategy;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.UUID;
 
 /**
  * 玩家坦克
  */
+@Getter
+@Setter
 public class Player extends AbstractGameObject {
 
     private static final int SPEED = 5;
@@ -24,6 +29,7 @@ public class Player extends AbstractGameObject {
     private boolean moving = false;
     private boolean living = true;
     private FireStrategy fireStrategy;
+    private UUID uuid = UUID.randomUUID();
 
 
     public Player(int x, int y, Dir dir, Group group) {
@@ -39,61 +45,10 @@ public class Player extends AbstractGameObject {
         initFireStrategy();
     }
 
-    public Rectangle getRect() {
-        return rect;
-    }
-
-    public void setRect(Rectangle rect) {
-        this.rect = rect;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    public Dir getDir() {
-        return dir;
-    }
-
-    public void setDir(Dir dir) {
-        this.dir = dir;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setLiving(boolean living) {
-        this.living = living;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
 
     @Override
     public boolean isLiving() {
         return living;
-    }
-
-    public boolean isMoving() {
-        return moving;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
     }
 
     private void move() {
@@ -129,18 +84,23 @@ public class Player extends AbstractGameObject {
         if (!isLiving()) {
             return;
         }
+
+        Color c = g.getColor();
+        g.setColor(Color.CYAN);
+        g.drawString(uuid.toString(), x, y - 10);
+        g.setColor(c);
         switch (dir) {
             case LEFT:
-                g.drawImage(ResourceMgr.goodTankL, x, y, null);
+                g.drawImage(group.equals(Group.BAD) ? ResourceMgr.badTankL : ResourceMgr.goodTankL, x, y, null);
                 break;
             case UP:
-                g.drawImage(ResourceMgr.goodTankU, x, y, null);
+                g.drawImage(group.equals(Group.BAD) ? ResourceMgr.badTankU : ResourceMgr.goodTankU, x, y, null);
                 break;
             case RIGHT:
-                g.drawImage(ResourceMgr.goodTankR, x, y, null);
+                g.drawImage(group.equals(Group.BAD) ? ResourceMgr.badTankR : ResourceMgr.goodTankR, x, y, null);
                 break;
             case DOWN:
-                g.drawImage(ResourceMgr.goodTankD, x, y, null);
+                g.drawImage(group.equals(Group.BAD) ? ResourceMgr.badTankD : ResourceMgr.goodTankD, x, y, null);
                 break;
         }
 

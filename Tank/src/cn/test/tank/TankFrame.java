@@ -8,20 +8,16 @@ import java.awt.event.WindowEvent;
 import java.io.*;
 
 /**
- * @Description:  游戏窗口类
- ** @Author:      QuLei
- * @CreateDate:   2019-07-28 01:15
- * @Version:      1.0
+ * @Description: 游戏窗口类
+ * * @Author:      QuLei
+ * @CreateDate: 2019-07-28 01:15
+ * @Version: 1.0
  */
 public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
     private GameModel gm;
     public static final int GAME_WIDTH = 1080;
     public static final int GAME_HEIGHT = 960;
-
-
-
-
 
     //将窗口类设置成为单例的
     private TankFrame() {
@@ -41,8 +37,6 @@ public class TankFrame extends Frame {
 
         });
     }
-
-
 
 
     @Override
@@ -66,6 +60,10 @@ public class TankFrame extends Frame {
         g.drawImage(offScreenImage, 0, 0, null);
     }
 
+    public GameModel getGm() {
+        return gm;
+    }
+
     private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -85,7 +83,7 @@ public class TankFrame extends Frame {
         }
 
 
-        private void save(){
+        private void save() {
             ObjectOutputStream outputStream = null;
             try {
                 File f = new File("F:/test/gf.dat");
@@ -96,7 +94,7 @@ public class TankFrame extends Frame {
 
             } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 try {
                     outputStream.close();
                 } catch (IOException e) {
@@ -105,8 +103,8 @@ public class TankFrame extends Frame {
             }
         }
 
-        private void load(){
-            ObjectInputStream objectInputStream= null;
+        private void load() {
+            ObjectInputStream objectInputStream = null;
             try {
                 File f = new File("F:/test/gf.dat");
                 FileInputStream fileInputStream = new FileInputStream(f);
@@ -114,7 +112,7 @@ public class TankFrame extends Frame {
                 gm = (GameModel) objectInputStream.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
 
                 try {
                     objectInputStream.close();
@@ -124,10 +122,6 @@ public class TankFrame extends Frame {
             }
         }
 
-    }
-
-    public GameModel getGm(){
-        return gm;
     }
 
 
