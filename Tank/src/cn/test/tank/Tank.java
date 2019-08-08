@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @Getter
 public class Tank extends AbstractGameObject {
-    private static final int SPEED = 1;
+    private static final int SPEED = 3;
     public static int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
     private Group group;
@@ -79,10 +79,10 @@ public class Tank extends AbstractGameObject {
                 break;
         }
         boundsCheck();
-        if (r.nextInt(100) > 90) {
+       /* if (r.nextInt(100) > 90) {
             randomDir();
             fire();
-        }
+        }*/
 
         rect.x = x;
         rect.y = y;
@@ -133,23 +133,6 @@ public class Tank extends AbstractGameObject {
 
     }
 
-
-    public void setDir(Dir dir) {
-        this.dir = dir;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public void die() {
         this.living = false;
         TankFrame.INSTANCE.getGm().add(new Explode(x, y));
@@ -159,6 +142,6 @@ public class Tank extends AbstractGameObject {
     public void fire() {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        TankFrame.INSTANCE.getGm().add(new Bullet(bX, bY, this.dir, this.group));
+        TankFrame.INSTANCE.getGm().add(new Bullet(bX, bY, this.dir, this.group, uuid));
     }
 }

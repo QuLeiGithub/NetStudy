@@ -56,7 +56,7 @@ public class Client {
      *
      * @param msg
      */
-    public void send(TankJoinMsg msg) {
+    public void send(Msg msg) {
         channel.writeAndFlush(msg);
     }
 
@@ -68,7 +68,7 @@ public class Client {
     }
 
 
-    class MyHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
+    class MyHandler extends SimpleChannelInboundHandler<Msg> {
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
             ctx.writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getGm().getMyTank()));
@@ -95,7 +95,7 @@ public class Client {
         }*/
 
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) throws Exception {
+        protected void channelRead0(ChannelHandlerContext ctx, Msg msg) throws Exception {
             msg.handle();
             System.out.println(msg);
         }

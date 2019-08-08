@@ -3,6 +3,8 @@ package cn.test.tank.chainofresponsibility;
 import cn.test.tank.AbstractGameObject;
 import cn.test.tank.Bullet;
 import cn.test.tank.Tank;
+import cn.test.tank.net.Client;
+import cn.test.tank.net.TankDieMsg;
 
 import java.awt.*;
 
@@ -19,6 +21,8 @@ public class BulletTankCollider implements Collider{
             if (b.getRect().intersects(rectTank)) {
                 b.die();
                 t.die();
+
+                Client.INSTANCE.send(new TankDieMsg(t.getUuid(), b.getUuid()));
                 return false;
             }
         } else if (go1 instanceof Tank && go2 instanceof Bullet) {

@@ -1,4 +1,4 @@
-initTankCount=1
+initTankCount=5
 gameWide=1080
 gameHeight=960
 tankFireStrategy=FourDirFireStrategy

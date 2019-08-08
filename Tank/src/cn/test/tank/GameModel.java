@@ -95,4 +95,16 @@ public class GameModel implements Serializable {
         }
         return null;
     }
+
+    public Bullet findBulletByUUID(UUID bulletId) {
+        for (AbstractGameObject b : objects) {
+            if (b instanceof Bullet) {
+                Bullet bullet = (Bullet) b;
+                if (bulletId.equals(bullet.getUuid())) {
+                    return bullet;
+                }
+            }
+        }
+        return null;
+    }
 }

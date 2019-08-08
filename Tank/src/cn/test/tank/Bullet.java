@@ -1,9 +1,17 @@
 package cn.test.tank;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.awt.*;
+import java.util.UUID;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@ToString
 public class Bullet extends AbstractGameObject{
     private int x,y;
     private Dir dir;
@@ -13,55 +21,21 @@ public class Bullet extends AbstractGameObject{
     public static int WIDTH = ResourceMgr.bulletU.getWidth();
     public static int HEIGHT = ResourceMgr.bulletU.getHeight();
     private Rectangle rect ;
+    private UUID uuid = UUID.randomUUID();
+    private UUID playerId;
 
-    public Rectangle getRect() {
-        return rect;
-    }
 
-    public void setRect(Rectangle rect) {
-        this.rect = rect;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public boolean isLive() {
-        return live;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    public void setLive(boolean live) {
-        this.live = live;
-    }
-
-    public Bullet(int x, int y, Dir dir, Group group) {
+    public Bullet(int x, int y, Dir dir, Group group, UUID playerId) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
         rect = new Rectangle(x,y,WIDTH,HEIGHT);
+        this.playerId = playerId;
+        //Client.INSTANCE.send(new BulletNewMsg(this));
     }
 
+    @Override
     public void paint(Graphics g) {
         switch(dir) {
             case LEFT:
@@ -119,5 +93,9 @@ public class Bullet extends AbstractGameObject{
 
     public void die(){
         this.setLive(false);
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
     }
 }

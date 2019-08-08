@@ -1,5 +1,8 @@
 package cn.test.tank;
 
+import cn.test.tank.net.Client;
+import cn.test.tank.net.TankMoveOrChangDirMsg;
+import cn.test.tank.net.TankStopMsg;
 import cn.test.tank.strategy.FireStrategy;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +18,7 @@ import java.util.UUID;
 @Setter
 public class Player extends AbstractGameObject {
 
-    private static final int SPEED = 5;
+    private static final int SPEED = 3;
     public static int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
     private Group group;
@@ -110,6 +113,7 @@ public class Player extends AbstractGameObject {
 
     public void die() {
         this.living = false;
+        TankFrame.INSTANCE.getGm().add(new Explode(x, y));
     }
 
 
@@ -176,22 +180,33 @@ public class Player extends AbstractGameObject {
     }
 
     private void setMainDir() {
-
+        boolean oldMoving = moving;
+        Dir oldDir = dir;
         if (!bL && !bU && !bR && !bD) {
             setMoving(false);
+            Client.INSTANCE.send(new TankStopMsg(this));
         } else {
+
             setMoving(true);
-            if (bL) {
+            if (bL && !bU && !bR && !bD) {
                 setDir(Dir.LEFT);
             }
-            if (bU) {
+            if (!bL && bU && !bR && !bD) {
                 setDir(Dir.UP);
             }
-            if (bR) {
+            if (!bL && !bU && bR && !bD) {
                 setDir(Dir.RIGHT);
             }
-            if (bD) {
+            if (!bL && !bU && !bR && bD) {
                 setDir(Dir.DOWN);
+            }
+            //old status is not moving ,now my tank will move immediate
+            if (!oldMoving) {
+                Client.INSTANCE.send(new TankMoveOrChangDirMsg(this));
+            }
+
+            if (!dir.equals(oldDir)) {
+                Client.INSTANCE.send(new TankMoveOrChangDirMsg(this));
             }
         }
     }
