@@ -127,6 +127,7 @@ public class Player extends AbstractGameObject {
         Class<FireStrategy> clazz = null;
         try {
             //根据不同的策略加载不同的子弹方式
+            System.out.println("测试git");
             clazz = (Class<FireStrategy>) Class.forName("cn.test.tank.strategy." + PropertyMgr.get("tankFireStrategy"));
             fireStrategy = clazz.newInstance();
         } catch (Exception e) {
