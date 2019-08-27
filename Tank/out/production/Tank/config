@@ -1,0 +1,5 @@
+initTankCount=0
+gameWide=1080
+gameHeight=960
+tankFireStrategy=DefaultFireStrategy
+collidersName=TankWallCollider,BulletWallCollider,BulletTankCollider,TankTankCollider,BulletPlayerCollider
